@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Class 10 Math Progress</title>
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f5faff; /* soft pale blue background */
+  margin: 0;
+  padding: 10px;
+}
+
+main {
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 123, 204, 0.1); /* soft blue shadow */
+}
+
+h1 {
+  font-size: 20px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #1565c0; /* soft, medium blue */
+}
+
+h2 {
+  font-size: 16px;
+  margin-top: 20px;
+  color: #1976d2; /* lighter blue for subheadings */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+th, td {
+  border: 1px solid #bbdefb; /* light blue border */
+  padding: 6px;
+  text-align: center;
+}
+
+th {
+  background: #64b5f6; /* flat light blue header */
+  color: #fff;
+}
+
+td {
+  background: #f0f7ff; /* very light blue row background */
+}
+
+input[type="checkbox"] {
+  transform: scale(1.2);
+  accent-color: #42a5f5; /* modern checkbox tint */
+}
+
+.progress-container {
+  background: #e3f2fd; /* soft blue track */
+  border-radius: 5px;
+  overflow: hidden;
+  height: 16px;
+  margin-bottom: 5px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.progress-bar {
+  background-color: #42a5f5; /* flat mid-blue bar */
+  height: 100%;
+  width: 0%;
+  color: white;
+  text-align: center;
+  font-size: 10px;
+  line-height: 16px;
+  border-radius: 5px 0 0 5px;
+  transition: width 0.5s ease-in-out;
+}
+
+.add-part {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.add-part input {
+  flex: 1;
+  padding: 4px;
+  font-size: 12px;
+  border: 1px solid #bbdefb;
+  border-radius: 4px;
+}
+
+.add-part button {
+  padding: 4px 8px;
+  font-size: 12px;
+  margin-left: 4px;
+  background: #42a5f5; /* flat mid-blue button */
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  transition: background 0.3s;
+}
+ #go{
+  background-color: #2196f3;
+  border: 0;
+  padding: 4px;
+  border-radius: 5px;
+  color: #fff;
+  transition: ease-in-out 0.2s;
+ }
+ #go:hover{
+  background-color: white;
+  color: #2196f3;
+  border: solid 0.2px #2196f3;
+ }
+
+.add-part button:hover {
+  background: #2196f3; /* slightly deeper blue on hover */
+}
+
+
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Class 10 Math Progress Tracker</h1>
+        <a href="index.html"><button  id="go">Go Back</button></a>
+    <div id="chapters"></div>
+  </main>
+<div id="reward" style="
+  position: fixed;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  color: gold;
+  display: none;
+  z-index: 9999;
+">🎉 Well Done! 🎉</div>
+<audio id="reward-audio" src="youdidit.mp3"></audio>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="reward.js"></script>
+  <script>
+    const defaultChapters = [
+      { id: 'real', title: 'Real Numbers', parts: ['Euclid\'s Division Lemma', 'Fundamental Theorem of Arithmetic', 'Decimal Representation of Rational Numbers'] },
+      { id: 'poly', title: 'Polynomials', parts: ['Zeroes of a Polynomial', 'Relationship Between Zeroes and Coefficients', 'Division Algorithm for Polynomials'] },
+      { id: 'linear', title: 'Pair of Linear Equations in Two Variables', parts: ['Graphical Solution', 'Algebraic Solution: Substitution', 'Algebraic Solution: Elimination', 'Conditions for Existence of Solutions'] },
+      { id: 'quad', title: 'Quadratic Equations', parts: ['Solution by Factorization', 'Solution by Quadratic Formula', 'Discriminant and Nature of Roots'] },
+      { id: 'ap', title: 'Arithmetic Progressions', parts: ['General Term of an AP', 'Sum of First n Terms', 'Word Problems on AP'] },
+      { id: 'tri', title: 'Triangles', parts: ['Similarity of Triangles', 'Criteria for Similarity', 'Areas of Similar Triangles', 'Pythagorean Theorem'] },
+      { id: 'coord', title: 'Coordinate Geometry', parts: ['Distance Formula', 'Section Formula', 'Area of Triangle', 'Concept of Slope'] },
+      { id: 'trig', title: 'Introduction to Trigonometry', parts: ['Trigonometric Ratios of Acute Angles', 'Trigonometric Identities', 'Trig Ratios of Complementary Angles'] },
+      { id: 'apptrig', title: 'Some Applications of Trigonometry', parts: ['Heights and Distances Problems'] },
+      { id: 'circ', title: 'Circles', parts: ['Tangents to a Circle', 'Number of Tangents from a Point', 'Related Theorems'] },
+      { id: 'area', title: 'Areas Related to Circles', parts: ['Areas of Sectors', 'Areas of Segments', 'Combined Plane Figures'] },
+      { id: 'svol', title: 'Surface Areas and Volumes', parts: ['Surface Areas of Solids', 'Volumes of Solids', 'Combinations of Solids'] },
+      { id: 'stats', title: 'Statistics', parts: ['Mean of Grouped/Ungrouped Data', 'Median', 'Mode', 'Cumulative Frequency Graph'] },
+      { id: 'prob', title: 'Probability', parts: ['Basic Probability Concepts', 'Simple Probability Problems'] }
+    ];
+
+    let savedData = JSON.parse(localStorage.getItem('mathData')) || defaultChapters;
+    const container = document.getElementById('chapters');
+
+    function saveChapters() {
+      localStorage.setItem('mathData', JSON.stringify(savedData));
+    }
+
+    function render() {
+      container.innerHTML = '';
+      savedData.forEach((chap, chapIndex) => {
+        const section = document.createElement('section');
+        section.innerHTML = `
+          <h2 contenteditable="true" oninput="updateTitle(${chapIndex}, this.innerText)">${chap.title}</h2>
+          <div class="progress-container">
+            <div class="progress-bar" id="progress-${chap.id}">0%</div>
+          </div>
+          <div class="add-part">
+            <input type="text" placeholder="Add part..." id="input-${chap.id}">
+            <button onclick="addPart(${chapIndex})">Add</button>
+          </div>
+          <table id="table-${chap.id}">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Video</th>
+                <th>Notes</th>
+                <th>Exercise</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        `;
+        container.appendChild(section);
+        renderParts(chapIndex);
+      });
+    }
+
+    function renderParts(chapIndex) {
+      const chap = savedData[chapIndex];
+      const tbody = document.querySelector(`#table-${chap.id} tbody`);
+      tbody.innerHTML = '';
+
+      chap.parts.forEach((part, partIndex) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td contenteditable="true">${part}</td>
+          <td><input type="checkbox" data-id="${chap.id}-${partIndex}-0" class="${chap.id}"></td>
+          <td><input type="checkbox" data-id="${chap.id}-${partIndex}-1" class="${chap.id}"></td>
+          <td><input type="checkbox" data-id="${chap.id}-${partIndex}-2" class="${chap.id}"></td>
+        `;
+        tbody.appendChild(tr);
+
+        // Triple-click delete
+        tr.querySelector('td').addEventListener('click', (e) => {
+          if (e.detail === 3) {
+            if (confirm("Do you want to delete this part?")) {
+              chap.parts.splice(partIndex, 1);
+              saveChapters();
+              render();
+            }
+          }
+        });
+      });
+
+      document.querySelectorAll(`input.${chap.id}`).forEach(cb => {
+        if (localStorage.getItem(cb.dataset.id) === 'true') cb.checked = true;
+        cb.onchange = () => {
+          localStorage.setItem(cb.dataset.id, cb.checked);
+          updateProgress(chap.id);
+        };
+      });
+
+      updateProgress(chap.id);
+    }
+
+function updateProgress(chapId) {
+  const boxes = document.querySelectorAll(`input.${chapId}`);
+  const total = boxes.length;
+  let checked = 0;
+  boxes.forEach(b => { if (b.checked) checked++; });
+  const percent = total ? Math.round((checked / total) * 100) : 0;
+  const bar = document.getElementById(`progress-${chapId}`);
+  bar.style.width = percent + '%';
+  bar.textContent = percent + '%';
+
+  const rewardKey = `rewarded-${chapId}`;
+
+  if (percent === 100 && localStorage.getItem(rewardKey) !== 'true') {
+    showReward();
+    localStorage.setItem(rewardKey, 'true');
+  }
+
+  if (percent < 100) {
+    localStorage.removeItem(rewardKey);
+  }
+}
+
+function showReward() {
+  const reward = document.createElement('div');
+  reward.textContent = '✔ You did it!';
+  reward.style.position = 'fixed';
+  reward.style.top = '20px';
+  reward.style.right = '20px';
+  reward.style.background = '#4caf50';
+  reward.style.color = 'white';
+  reward.style.padding = '15px 20px';
+  reward.style.borderRadius = '8px';
+  reward.style.fontSize = '16px';
+  reward.style.boxShadow = '0 2px 8px rgba(0,0,0,0.3)';
+  reward.style.zIndex = '1000';
+  reward.style.opacity = '0';
+
+  document.body.appendChild(reward);
+
+  // Play the audio element you already have
+  const audio = document.getElementById('reward-audio');
+  if (audio) {
+    audio.play().catch(() => {
+      console.log('Audio playback blocked — interaction may be needed.');
+    });
+  }
+
+  // Show + fade out the reward box
+  reward.style.transition = 'opacity 0.5s ease';
+  setTimeout(() => { reward.style.opacity = '1'; }, 10);
+  setTimeout(() => { reward.style.opacity = '0'; }, 2500);
+  setTimeout(() => { reward.remove(); }, 3000);
+}
+
+    function addPart(chapIndex) {
+      const chap = savedData[chapIndex];
+      const input = document.getElementById(`input-${chap.id}`);
+      const value = input.value.trim();
+      if (value !== '') {
+        chap.parts.push(value);
+        input.value = '';
+        saveChapters();
+        render();
+      }
+    }
+
+    function updateTitle(chapIndex, text) {
+      savedData[chapIndex].title = text.trim();
+      saveChapters();
+    }
+
+    render();
+  </script>
+</body>
+</html>
